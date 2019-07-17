@@ -2,85 +2,93 @@
   <div>
     <span id="closethechatbutton" @click="()=>{this.$router.push('/')}">&#10006;</span>
     <div id="chatBot">
-      <div class="row userside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat self">Hello Stranger</p>
-      </div>
       <div class="row notuserside">
         <img src="../assets/svg/bot.svg" />
-        <p class="chat bot">Hii</p>
+        <p
+          v-if="this.$store.state.isAuth == true"
+          class="chat bot"
+        >Hello , {{this.$store.state.cUser.displayName}}</p>
+        <p v-else class="chat bot">Hello Stranger</p>
       </div>
-      <div class="row userside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat self">Please answer some question for better diet plan</p>
-      </div>
-      <div class="row notuserside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat bot">Okay</p>
-      </div>
-      <div class="row userside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat self">What's your name ?</p>
-      </div>
-      <div class="row notuserside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat bot">Kartik Yadav</p>
-      </div>
-      <div class="row userside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat self">Gender</p>
-      </div>
-      <div class="row notuserside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat bot">Male</p>
-      </div>
-      <div class="row userside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat self">May i know you age</p>
-      </div>
-      <div class="row notuserside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat bot">Just 20</p>
-      </div>
-      <div class="row userside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat self">What's your current weight</p>
-      </div>
-      <div class="row notuserside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat bot">87kg</p>
-      </div>
-      <div class="row userside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat self">Are you a vergiterian or non vergiterian</p>
-      </div>
-      <div class="row notuserside">
-        <img src="../assets/svg/bot.svg" />
-        <p class="chat bot">Male</p>
-        <!-- </div>{/*
+    </div>
+    <div v-if="botting == true" id="botting">
+      <img src="../assets/svg/bot.svg" />
       <div id="usertypingdots">
         <span />
         <span />
         <span />
-        </div>*/}-->
       </div>
-      <div id="typerforuser">
-        <input id="chatinput" type="text" />
-        <v-icon id="sendiconchat">send</v-icon>
-      </div>
+    </div>
+    <div id="typerforuser">
+      <input v-model="currentData" id="chatinput" type="text" />
+      <v-icon @click="submitData(currentQuery)" id="sendiconchat">send</v-icon>
     </div>
   </div>
 </template>
 <script>
+import kk from "../assets/svg/bot.svg";
 export default {
   data() {
-    return {};
+    return {
+      currentData: "",
+      botting: false,
+      currentQuery: 0
+    };
   },
   created() {
     this.$store.state.showNav = false;
   },
   destroyed() {
     this.$store.state.showNav = true;
+  },
+  methods: {
+    submitData(i) {
+      var userDiv = document.querySelector("#chatBot");
+      var innerDiv = document.createElement("div");
+      innerDiv.classList = "row userside";
+      innerDiv.style = "display: flex;width: 100%;flex-flow: row-reverse;";
+      userDiv.appendChild(innerDiv);
+      console.log(i);
+
+      userDiv = document.querySelectorAll(".userside")[i];
+      console.log(userDiv);
+
+      innerDiv = document.createElement("img");
+      innerDiv.src = kk;
+      innerDiv.style = "width: 35px;padding: 5px";
+      userDiv.appendChild(innerDiv);
+      innerDiv = document.createElement("p");
+      innerDiv.classList = "chat self";
+      innerDiv.innerHTML = this.currentData;
+      innerDiv.style =
+        "float: right;background: whitesmoke;color: black;padding: 10px;border-radius: 15px;width: 60%;margin: 10px 0;";
+      userDiv.appendChild(innerDiv);
+      this.currentQuery++;
+      this.botTyping();
+    },
+    botTyping() {
+      this.botting = true;
+      setTimeout(() => {
+        this.currentData = "";
+        var userDiv = document.querySelector("#chatBot");
+        var innerDiv = document.createElement("div");
+        innerDiv.classList = "row notuserside";
+        innerDiv.style = "display: flex;width: 100%;flex-flow: row;";
+        userDiv.appendChild(innerDiv);
+        userDiv = document.querySelectorAll(".notuserside")[this.currentQuery];
+        innerDiv = document.createElement("img");
+        innerDiv.src = kk;
+        innerDiv.style = "width: 35px;padding: 5px";
+        userDiv.appendChild(innerDiv);
+        innerDiv = document.createElement("p");
+        innerDiv.classList = "chat bot";
+        innerDiv.innerHTML = "testing bot";
+        innerDiv.style =
+          "float: right;background: #fd9000;color: white;padding: 10px;border-radius: 15px;width: 60%;margin: 10px 0;";
+        userDiv.appendChild(innerDiv);
+        this.botting = false;
+      }, 1000);
+    }
   }
 };
 </script>
@@ -104,25 +112,31 @@ export default {
 }
 
 .userside {
-  flex-flow: row;
-}
-
-.notuserside {
   flex-flow: row-reverse;
 }
 
+.notuserside {
+  flex-flow: row;
+}
+
 .self {
+  float: left;
+  background: whitesmoke;
+}
+.bot {
   float: right;
   background: #fd9000;
   color: white;
 }
-.bot {
-  float: left;
-  background: whitesmoke;
-}
 img {
   width: 35px;
   padding: 5px;
+}
+
+#botting {
+  display: flex;
+  bottom: 61px;
+  position: fixed;
 }
 
 #typerforuser {
@@ -168,7 +182,7 @@ img {
 
   width: 75%;
 
-  margin-left: 15px;
+  margin-right: 50px;
   outline: none;
   font-size: 18px;
   height: 54px;

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
 import router from '@/router';
 import * as firebase from "firebase";
 import createPersistedState from 'vuex-persistedstate'
@@ -31,13 +30,14 @@ export default new Vuex.Store({
       commit
   }) {
       firebase.auth().signInWithPopup(gProvider).then(async user => {
-        axios
-      .get(`https://fitdotyou.herokuapp.com/users?uid=${user.user.uid}&name=${user.user.displayName}&email=${user.user.email}`)
-      .then(response => {console.log(response)
-      })
-        // commit('setUser', user.user);
-        //       commit('setIsAuthenticated', true);
-        //       console.log(user);
+        fetch(`https://fitdotyou.herokuapp.com/users?uid=${user.user.uid}&name=${user.user.displayName}&email=${user.user.email}`).then(response => response.json()).then(data => console.log(data));
+        // axios
+        // .get(`https://fitdotyou.herokuapp.com/users?uid=${user.user.uid}&name=${user.user.displayName}&email=${user.user.email}`)
+        // .then(response => {console.log(response)
+        // })
+        commit('setUser', user.user);
+              commit('setIsAuthenticated', true);
+              console.log(user);
               
       }).catch((error) => {
         
@@ -56,10 +56,8 @@ export default new Vuex.Store({
       // .get(`https://fitdotyou.herokuapp.com/users?uid=${user.user.uid}&name=${user.user.displayName}&email=${user.user.email}`)
       // .then(response => {console.log(response)
       // })
-      fetch(`https://fitdotyou.herokuapp.com/users?uid=${user.user.uid}&name=${user.user.displayName}&email=${user.user.email}`).then(function (response) {
-            return console.log(response);
-            
-    })
+      fetch(`https://fitdotyou.herokuapp.com/users?uid=${user.user.uid}&name=${user.user.displayName}&email=${user.user.email}`).then(response => response.json()).then(data => console.log(data));
+
       commit('setUser', user.user);
       commit('setIsAuthenticated', true);
       console.log(user);
