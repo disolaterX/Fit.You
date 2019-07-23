@@ -20,7 +20,7 @@
       </div>
     </div>
     <div id="typerforuser">
-      <input v-model="currentData" id="chatinput" type="text" />
+      <input autocomplete="off" v-model="currentData" id="chatinput" type="text" />
       <v-icon @click="submitData(currentQuery)" id="sendiconchat">send</v-icon>
     </div>
   </div>
@@ -32,7 +32,21 @@ export default {
     return {
       currentData: "",
       botting: false,
-      currentQuery: 0
+      currentQuery: 0,
+      botQuery: 0,
+      userInfo: [],
+      botQuestion: [
+        { question: "Want new diet plan ?", title: "Need Plan" },
+        { question: "Enter you full name", title: "Name" },
+        { question: "Your Age", title: "Age" },
+        { question: "Your Gender", title: "Gender" },
+        { question: "Your Weight", title: "Weight" },
+        { question: "Your Height", title: "Height" },
+        { question: "Vegetarian/Non-vegetarian", title: "Vegan" },
+        { question: "Do you work out ?", title: "Workingout" },
+        { question: "Working or Student", title: "Student" },
+        { question: "Can you afford high cost food", title: "Rich" }
+      ]
     };
   },
   created() {
@@ -43,6 +57,7 @@ export default {
   },
   methods: {
     submitData(i) {
+      if (this.botQuery < 9) {
       var userDiv = document.querySelector("#chatBot");
       var innerDiv = document.createElement("div");
       innerDiv.classList = "row userside";
@@ -60,16 +75,44 @@ export default {
       innerDiv = document.createElement("p");
       innerDiv.classList = "chat self";
       innerDiv.innerHTML = this.currentData;
+      this.userInfo.push(this.currentData);
       innerDiv.style =
         "float: right;background: whitesmoke;color: black;padding: 10px;border-radius: 15px;width: 60%;margin: 10px 0;";
       userDiv.appendChild(innerDiv);
       this.currentQuery++;
-      this.botTyping();
+        this.botTyping();
+      }
     },
     botTyping() {
       this.botting = true;
-      setTimeout(() => {
-        this.currentData = "";
+      this.currentData = "";
+      if (this.botQuery < 9) {
+        console.log(this.userInfo);
+
+        setTimeout(() => {
+          var userDiv = document.querySelector("#chatBot");
+          var innerDiv = document.createElement("div");
+          innerDiv.classList = "row notuserside";
+          innerDiv.style = "display: flex;width: 100%;flex-flow: row;";
+          userDiv.appendChild(innerDiv);
+          userDiv = document.querySelectorAll(".notuserside")[
+            this.currentQuery
+          ];
+          innerDiv = document.createElement("img");
+          innerDiv.src = kk;
+          innerDiv.style = "width: 35px;padding: 5px";
+          userDiv.appendChild(innerDiv);
+          innerDiv = document.createElement("p");
+          innerDiv.classList = "chat bot";
+          innerDiv.innerHTML = this.botQuestion[this.botQuery].question;
+          innerDiv.style =
+            "float: right;background: #fd9000;color: white;padding: 10px;border-radius: 15px;width: 60%;margin: 10px 0;";
+          userDiv.appendChild(innerDiv);
+
+          this.botQuery++;
+          this.botting = false;
+        }, 1000);
+      } else {
         var userDiv = document.querySelector("#chatBot");
         var innerDiv = document.createElement("div");
         innerDiv.classList = "row notuserside";
@@ -82,12 +125,13 @@ export default {
         userDiv.appendChild(innerDiv);
         innerDiv = document.createElement("p");
         innerDiv.classList = "chat bot";
-        innerDiv.innerHTML = "testing bot";
+        innerDiv.innerHTML =
+          "Thanks for your responce We Will get back to you ASPS";
         innerDiv.style =
           "float: right;background: #fd9000;color: white;padding: 10px;border-radius: 15px;width: 60%;margin: 10px 0;";
         userDiv.appendChild(innerDiv);
         this.botting = false;
-      }, 1000);
+      }
     }
   }
 };
