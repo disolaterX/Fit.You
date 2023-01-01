@@ -9,19 +9,19 @@
   "dependencies": {
     "firebase": "^6.3.0",
     "register-service-worker": "^1.6.2",
-    "style-loader": "^0.23.1",
+    "style-loader": "^3.3.1",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
+    "stylus-loader": "^7.1.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuetify": "^1.5.16",
-    "vuetify-loader": "^1.2.2",
+    "vuetify-loader": "^1.9.2",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
-    "@vue/cli-plugin-pwa": "^3.9.0",
-    "@vue/cli-service": "^3.9.0",
+    "@vue/cli-plugin-pwa": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "material-design-icons-iconfont": "^5.0.1",
     "vue-template-compiler": "^2.6.10"
   },
